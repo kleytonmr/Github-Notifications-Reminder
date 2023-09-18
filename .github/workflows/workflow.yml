@@ -1,0 +1,27 @@
+name: GitHubNoticationsReminder
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 12,17,20 * * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.0'
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+
+      - name: Slack Notification
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}
+          SLACK_GITHUB_NOTIFICATIONS_REMINDER_WEBHOOK_URL: ${{ vars.SLACK_GITHUB_NOTIFICATIONS_REMINDER_WEBHOOK_URL }}
+          GITHUB_PULL_REQUEST_URL: ${{ vars.PULL_REQUEST_URL_GITHUB }}
+          GITHUB_BASE_URL_API: ${{ vars.BASE_URL_API_GITHUB }}
+          GITHUB_CI_STATUS_URL: ${{ vars.CI_STATUS_URL_GITHUB }}
+        run: |
+          bundle exec ruby github_notifications_reminder.rb
