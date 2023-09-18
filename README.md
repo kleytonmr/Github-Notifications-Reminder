@@ -1,1 +1,1 @@
-# Github-Notifications-Reminder
+# Github-Notifications-Reminder (POC)
